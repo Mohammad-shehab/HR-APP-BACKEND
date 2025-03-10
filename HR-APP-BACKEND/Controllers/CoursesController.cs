@@ -46,6 +46,17 @@ public class CoursesController : ControllerBase
         _context.SaveChanges();
         return Ok();
     }
+
+    [HttpPost]
+    //[Authorize(Roles = "HR")]
+    public IActionResult AddCourse([FromBody] Course newCourse)
+    {
+        _context.Courses.Add(newCourse);
+        _context.SaveChanges();
+        return Ok(newCourse);
+    }
+
+
 }
 
 public class ApplyModel
