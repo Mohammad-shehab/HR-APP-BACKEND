@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HR_APP_BACKEND.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250309083231_csjksl")]
-    partial class csjksl
+    [Migration("20250311075235_ghjk")]
+    partial class ghjk
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,52 @@ namespace HR_APP_BACKEND.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CourseApplication", b =>
+                {
+                    b.Property<int>("ApplicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationId"));
+
+                    b.Property<DateTime>("AppliedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<DateTime?>("CompletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReviewedBy")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ReviewedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Pending");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ApplicationId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("ReviewedBy");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CourseApplications");
+                });
 
             modelBuilder.Entity("HR_APP_BACKEND.Models.ApplicationUser", b =>
                 {
@@ -166,49 +212,170 @@ namespace HR_APP_BACKEND.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Courses");
-                });
 
-            modelBuilder.Entity("HR_APP_BACKEND.Models.CourseApplication", b =>
-                {
-                    b.Property<int>("ApplicationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationId"));
-
-                    b.Property<DateTime>("AppliedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReviewedBy")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("ReviewedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("Pending");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ApplicationId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("ReviewedBy");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CourseApplications");
+                    b.HasData(
+                        new
+                        {
+                            CourseId = 1,
+                            CertificationName = "SQL Expert",
+                            CourseName = "Advanced SQL",
+                            DepartmentId = 1,
+                            Description = "Master SQL for data management",
+                            Duration = "2 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 2,
+                            CertificationName = "Cybersecurity Fundamentals",
+                            CourseName = "Cybersecurity Basics",
+                            DepartmentId = 1,
+                            Description = "Learn to secure systems",
+                            Duration = "3 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 3,
+                            CertificationName = "Cloud Practitioner",
+                            CourseName = "Cloud Computing",
+                            DepartmentId = 1,
+                            Description = "Introduction to AWS and Azure",
+                            Duration = "4 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 4,
+                            CertificationName = "Finance Analyst",
+                            CourseName = "Financial Analysis",
+                            DepartmentId = 2,
+                            Description = "Analyze financial statements",
+                            Duration = "3 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 5,
+                            CertificationName = "Risk Manager",
+                            CourseName = "Risk Management",
+                            DepartmentId = 2,
+                            Description = "Manage financial risks",
+                            Duration = "2 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 6,
+                            CertificationName = "Accounting Basics",
+                            CourseName = "Accounting Principles",
+                            DepartmentId = 2,
+                            Description = "Basics of accounting",
+                            Duration = "4 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 7,
+                            CertificationName = "Recruitment Specialist",
+                            CourseName = "Recruitment Strategies",
+                            DepartmentId = 3,
+                            Description = "Effective hiring techniques",
+                            Duration = "2 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 8,
+                            CertificationName = "Engagement Expert",
+                            CourseName = "Employee Engagement",
+                            DepartmentId = 3,
+                            Description = "Boost workplace morale",
+                            Duration = "3 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 9,
+                            CertificationName = "Labor Law Certified",
+                            CourseName = "Labor Law",
+                            DepartmentId = 3,
+                            Description = "Understand employment laws",
+                            Duration = "4 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 10,
+                            CertificationName = "Digital Marketer",
+                            CourseName = "Digital Marketing",
+                            DepartmentId = 4,
+                            Description = "Online marketing strategies",
+                            Duration = "3 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 11,
+                            CertificationName = "Brand Manager",
+                            CourseName = "Brand Management",
+                            DepartmentId = 4,
+                            Description = "Build strong brands",
+                            Duration = "2 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 12,
+                            CertificationName = "Market Researcher",
+                            CourseName = "Market Research",
+                            DepartmentId = 4,
+                            Description = "Analyze market trends",
+                            Duration = "4 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 13,
+                            CertificationName = "Process Expert",
+                            CourseName = "Process Optimization",
+                            DepartmentId = 5,
+                            Description = "Improve operational efficiency",
+                            Duration = "3 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 14,
+                            CertificationName = "Supply Chain Specialist",
+                            CourseName = "Supply Chain Management",
+                            DepartmentId = 5,
+                            Description = "Manage logistics",
+                            Duration = "4 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 15,
+                            CertificationName = "Project Manager",
+                            CourseName = "Project Management",
+                            DepartmentId = 5,
+                            Description = "Lead projects effectively",
+                            Duration = "2 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 16,
+                            CertificationName = "HR Analyst",
+                            CourseName = "HR Analytics",
+                            DepartmentId = 6,
+                            Description = "Use data in HR decisions",
+                            Duration = "3 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 17,
+                            CertificationName = "Conflict Mediator",
+                            CourseName = "Conflict Resolution",
+                            DepartmentId = 6,
+                            Description = "Resolve workplace disputes",
+                            Duration = "2 weeks"
+                        },
+                        new
+                        {
+                            CourseId = 18,
+                            CertificationName = "Performance Specialist",
+                            CourseName = "Performance Management",
+                            DepartmentId = 6,
+                            Description = "Evaluate employee performance",
+                            Duration = "4 weeks"
+                        });
                 });
 
             modelBuilder.Entity("HR_APP_BACKEND.Models.Department", b =>
@@ -252,6 +419,11 @@ namespace HR_APP_BACKEND.Migrations
                         {
                             DepartmentId = 5,
                             DepartmentName = "Operations"
+                        },
+                        new
+                        {
+                            DepartmentId = 6,
+                            DepartmentName = "HR"
                         });
                 });
 
@@ -388,6 +560,32 @@ namespace HR_APP_BACKEND.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CourseApplication", b =>
+                {
+                    b.HasOne("HR_APP_BACKEND.Models.Course", "Course")
+                        .WithMany("CourseApplications")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HR_APP_BACKEND.Models.ApplicationUser", "Reviewer")
+                        .WithMany("ReviewedApplications")
+                        .HasForeignKey("ReviewedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HR_APP_BACKEND.Models.ApplicationUser", "Applicant")
+                        .WithMany("CourseApplications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Applicant");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Reviewer");
+                });
+
             modelBuilder.Entity("HR_APP_BACKEND.Models.ApplicationUser", b =>
                 {
                     b.HasOne("HR_APP_BACKEND.Models.Department", "Department")
@@ -425,32 +623,6 @@ namespace HR_APP_BACKEND.Migrations
                         .IsRequired();
 
                     b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("HR_APP_BACKEND.Models.CourseApplication", b =>
-                {
-                    b.HasOne("HR_APP_BACKEND.Models.Course", "Course")
-                        .WithMany("CourseApplications")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HR_APP_BACKEND.Models.ApplicationUser", "Reviewer")
-                        .WithMany("ReviewedApplications")
-                        .HasForeignKey("ReviewedBy")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("HR_APP_BACKEND.Models.ApplicationUser", "Applicant")
-                        .WithMany("CourseApplications")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Applicant");
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Reviewer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

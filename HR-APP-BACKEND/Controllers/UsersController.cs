@@ -6,7 +6,6 @@ using System.Security.Claims;
 
 [Route("api/users")]
 [ApiController]
-[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly ApplicationDbContext _context;

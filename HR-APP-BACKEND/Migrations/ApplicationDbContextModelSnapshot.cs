@@ -22,6 +22,52 @@ namespace HR_APP_BACKEND.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CourseApplication", b =>
+                {
+                    b.Property<int>("ApplicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationId"));
+
+                    b.Property<DateTime>("AppliedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<DateTime?>("CompletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReviewedBy")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ReviewedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Pending");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ApplicationId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("ReviewedBy");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CourseApplications");
+                });
+
             modelBuilder.Entity("HR_APP_BACKEND.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -329,49 +375,6 @@ namespace HR_APP_BACKEND.Migrations
                         });
                 });
 
-            modelBuilder.Entity("HR_APP_BACKEND.Models.CourseApplication", b =>
-                {
-                    b.Property<int>("ApplicationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationId"));
-
-                    b.Property<DateTime>("AppliedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReviewedBy")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("ReviewedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("Pending");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ApplicationId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("ReviewedBy");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CourseApplications");
-                });
-
             modelBuilder.Entity("HR_APP_BACKEND.Models.Department", b =>
                 {
                     b.Property<int>("DepartmentId")
@@ -554,6 +557,32 @@ namespace HR_APP_BACKEND.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CourseApplication", b =>
+                {
+                    b.HasOne("HR_APP_BACKEND.Models.Course", "Course")
+                        .WithMany("CourseApplications")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HR_APP_BACKEND.Models.ApplicationUser", "Reviewer")
+                        .WithMany("ReviewedApplications")
+                        .HasForeignKey("ReviewedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HR_APP_BACKEND.Models.ApplicationUser", "Applicant")
+                        .WithMany("CourseApplications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Applicant");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Reviewer");
+                });
+
             modelBuilder.Entity("HR_APP_BACKEND.Models.ApplicationUser", b =>
                 {
                     b.HasOne("HR_APP_BACKEND.Models.Department", "Department")
@@ -591,32 +620,6 @@ namespace HR_APP_BACKEND.Migrations
                         .IsRequired();
 
                     b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("HR_APP_BACKEND.Models.CourseApplication", b =>
-                {
-                    b.HasOne("HR_APP_BACKEND.Models.Course", "Course")
-                        .WithMany("CourseApplications")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HR_APP_BACKEND.Models.ApplicationUser", "Reviewer")
-                        .WithMany("ReviewedApplications")
-                        .HasForeignKey("ReviewedBy")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("HR_APP_BACKEND.Models.ApplicationUser", "Applicant")
-                        .WithMany("CourseApplications")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Applicant");
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Reviewer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

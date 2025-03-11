@@ -5,7 +5,7 @@
 namespace HR_APP_BACKEND.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class bnmmsdsds : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

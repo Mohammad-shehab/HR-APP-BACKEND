@@ -1,5 +1,4 @@
 ﻿using HR_APP_BACKEND.Models;
-using HR_APP_BACKEND.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -84,13 +83,19 @@ namespace HR_APP_BACKEND.Data
                 .WithMany(c => c.Certifications)
                 .HasForeignKey(cert => cert.CourseId);
 
+            // Configure CourseApplication properties
             modelBuilder.Entity<CourseApplication>()
                 .Property(ca => ca.Status)
-                .HasDefaultValue("Pending");
+                .HasDefaultValue("Pending"); // Already here, sets default status
 
             modelBuilder.Entity<CourseApplication>()
                 .Property(ca => ca.AppliedDate)
                 .HasDefaultValueSql("GETDATE()");
+
+            // NEW: Add CompletionDate as an optional field (nullable)
+            modelBuilder.Entity<CourseApplication>()
+                .Property(ca => ca.CompletionDate)
+                .IsRequired(false); // Optional, only set when course is completed
 
             // Seed Department data
             modelBuilder.Entity<Department>().HasData(
@@ -99,7 +104,7 @@ namespace HR_APP_BACKEND.Data
                 new Department { DepartmentId = 3, DepartmentName = "Human Resources" },
                 new Department { DepartmentId = 4, DepartmentName = "Marketing" },
                 new Department { DepartmentId = 5, DepartmentName = "Operations" },
-                new Department { DepartmentId = 6, DepartmentName = "HR" } // Note: "HR" and "Human Resources" are similar; consider merging or renaming
+                new Department { DepartmentId = 6, DepartmentName = "HR" }
             );
 
             // Seed Course data (3 courses per department, 18 total)

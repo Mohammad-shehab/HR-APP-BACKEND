@@ -34,17 +34,6 @@ public class CourseApplicationsController : ControllerBase
         application.Status = "Approved";
         application.ReviewedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
         application.ReviewedDate = DateTime.UtcNow;
-
-        // Issue certification
-        var certification = new Certification
-        {
-            UserId = application.UserId,
-            CourseId = application.CourseId,
-            CertificationName = _context.Courses.Find(application.CourseId).CertificationName,
-            IssueDate = DateTime.UtcNow
-        };
-        _context.Certifications.Add(certification);
-
         _context.SaveChanges();
         return Ok();
     }
@@ -60,4 +49,34 @@ public class CourseApplicationsController : ControllerBase
         _context.SaveChanges();
         return Ok();
     }
+    [HttpPut("{id}/complete")]
+    [Authorize(Roles = "HR")]
+    public IActionResult CompleteApplication(int id)
+    {
+        var application = _context.CourseApplications
+            .Include(ca => ca.Course)
+            .FirstOrDefault(ca => ca.ApplicationId == id);
+        if (application == null) return NotFound();
+        if (application.Status != "Approved")
+            return BadRequest("Application must be approved before marking as completed.");
+
+        application.Status = "Completed";
+        application.CompletionDate = DateTime.UtcNow;
+
+        var certification = new Certification
+        {
+            UserId = application.UserId,
+            CourseId = application.CourseId,
+            CertificationName = application.Course.CertificationName,
+            IssueDate = DateTime.UtcNow
+        };
+        _context.Certifications.Add(certification);
+
+        _context.SaveChanges();
+        return Ok();
+    }
+
+
+
+
 }
