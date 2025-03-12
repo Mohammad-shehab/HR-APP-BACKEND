@@ -34,7 +34,13 @@ public class UsersController : ControllerBase
     {
         var employees = _context.Users
             .Where(u => u.Role == "Employee")
+            .Include(u => u.CourseApplications)
+                .ThenInclude(ca => ca.Course)
+            .Include(u => u.Certifications)
+                .ThenInclude(cert => cert.Course)
             .ToList();
+
         return Ok(employees);
     }
+
 }

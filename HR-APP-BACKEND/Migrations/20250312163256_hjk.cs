@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HR_APP_BACKEND.Migrations
 {
     /// <inheritdoc />
-    public partial class ghjk : Migration
+    public partial class hjk : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

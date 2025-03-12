@@ -21,7 +21,9 @@ public class CourseApplicationsController : ControllerBase
     {
         var applications = _context.CourseApplications
             .Include(ca => ca.Applicant)
+            .ThenInclude(a => a.CourseApplications)
             .Include(ca => ca.Course)
+            .Include(ca => ca.Reviewer)
             .ToList();
         return Ok(applications);
     }
@@ -49,6 +51,7 @@ public class CourseApplicationsController : ControllerBase
         _context.SaveChanges();
         return Ok();
     }
+
     [HttpPut("{id}/complete")]
     [Authorize(Roles = "HR")]
     public IActionResult CompleteApplication(int id)
@@ -75,8 +78,5 @@ public class CourseApplicationsController : ControllerBase
         _context.SaveChanges();
         return Ok();
     }
-
-
-
-
 }
+
